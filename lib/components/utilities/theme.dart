@@ -14,8 +14,8 @@ class AppTheme {
     ).copyWith(
       scaffoldBackgroundColor: AppColors.backGroudColor,
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.whiteColor,
-        centerTitle: true,
+        backgroundColor: AppColors.appBarColor,
+        // centerTitle: true,
       ),
     );
   }

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Backgrond Color
 
-  static const Color primaryColor = Color(0xFF0F4177);
-  static const Color secondryColor = Color.fromRGBO(24, 26, 27, 255);
-  static const Color backGroudColor = Color(0xFFFFFFFF);
+  static const Color primaryColor = Color.fromARGB(255,100,181,246);
+  static const Color secondryColor = Color(0xFF04CE69);
+  static const Color backGroudColor = Color.fromARGB(244, 255, 255, 255);
+  static const Color appBarColor = Colors.transparent;
+  
 
   // static const Color backGroudColor = Color.fromRGBO(30, 32, 34, 255);
   static const Color backGroundColorWithOpacityh =
