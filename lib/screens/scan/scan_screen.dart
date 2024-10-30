@@ -15,61 +15,94 @@ class ScanScreen extends StatelessWidget {
         appBar: customAppBar(title: "Scan Your Skin"),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.lightGreyCardColor,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 2,
-                    ),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.image,
-                      color: Colors.grey[400],
-                      size: 100,
-                    ),
-                  ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.lightGreyCardColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 8.0,
+                  offset: const Offset(0, 4),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              ],
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.camera_alt,color: AppColors.whiteColor,),
-                    label: textSize12(
-                        text: "Upload Image",
-                        color: AppColors.textPrimaryColor),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
-                    ),
+                  const Icon(
+                    Icons.image,
+                    color: AppColors.primaryColor,
+                    size: 100,
                   ),
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.upload,
-                      color: AppColors.whiteColor,
-                    ),
-                    label: textSize12(
-                        text: "Upload Image",
-                        color: AppColors.textPrimaryColor),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.secondryColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: textSize25(
+                        text: "Scan Your Skin", color: AppColors.primaryColor),
+                  ),
+                  textSize16(
+                    fontWeight: FontWeight.normal,
+                    text: "Capture or upload an image for AI analysis.",
                   ),
                 ],
               ),
+            ),
+          ),
+        ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            color: AppColors.whiteColor,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.blackColor.withOpacity(0.1),
+                blurRadius: 5.0,
+                offset: const Offset(0, -2),
+              ),
             ],
+          ),
+          child: SizedBox(
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.camera_alt,
+                    color: AppColors.whiteColor,
+                  ),
+                  label: textSize12(
+                      text: "Open Camera", color: AppColors.textPrimaryColor),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.upload,
+                    color: AppColors.whiteColor,
+                  ),
+                  label: textSize12(
+                      text: "Upload Image", color: AppColors.textPrimaryColor),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondryColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

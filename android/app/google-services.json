@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920129677321",
+    "project_id": "skinsafeapp-fdcdb",
+    "storage_bucket": "skinsafeapp-fdcdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920129677321:android:19418e22e7ee739a8ef0d8",
+        "android_client_info": {
+          "package_name": "com.desmond.skin_safe_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGUeX99vAghgczy_vtGjiN8VCuFxxyj0c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

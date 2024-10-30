@@ -33,9 +33,14 @@ Widget textSize14({
   required String text,
   Color color = AppColors.textSeconderyColor,
   FontWeight fontWeight = FontWeight.normal,
+  TextOverflow overFlow = TextOverflow.ellipsis,
+  int maxLines = 10,
 }) {
   return Text(
     text,
+    maxLines: maxLines,
+    textAlign: TextAlign.start,
+    overflow: overFlow,
     style: TextStyle(
       color: color,
       fontSize: 14,

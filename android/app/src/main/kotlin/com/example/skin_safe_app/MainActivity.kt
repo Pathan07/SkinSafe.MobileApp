@@ -1,4 +1,4 @@
-package com.example.skin_safe_app
+package com.desmond.skin_safe_app;
 
 import io.flutter.embedding.android.FlutterActivity
 
