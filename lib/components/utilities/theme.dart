@@ -5,16 +5,17 @@ class AppTheme {
   ThemeData themeData() {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primaryColor,
-        primary: AppColors.primaryColor,
-        secondary: AppColors.secondryColor,
+        seedColor: AppColors.logoColor,
+        primary: AppColors.logoColor,
+        secondary: AppColors.whiteColor,
       ),
       fontFamily: 'inter',
       useMaterial3: true,
     ).copyWith(
       scaffoldBackgroundColor: AppColors.backGroudColor,
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.appBarColor,
+        iconTheme: IconThemeData(color: AppColors.whiteColor),
+        backgroundColor: AppColors.logoColor,
         // centerTitle: true,
       ),
     );

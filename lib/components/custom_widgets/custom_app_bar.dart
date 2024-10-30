@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skin_safe_app/components/custom_text.dart';
+import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 
 PreferredSizeWidget customAppBar({
   required String title,

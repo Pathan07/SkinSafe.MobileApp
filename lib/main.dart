@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skin_safe_app/components/routes/route.dart';
 import 'package:skin_safe_app/components/utilities/theme.dart';
 import 'package:skin_safe_app/firebase_options.dart';
+import 'package:skin_safe_app/screens/auth_screen/widgets/sign_up_screen.dart';
 import 'package:skin_safe_app/screens/home_screen.dart/home_screen.dart';
 
 Future<void> main() async {
@@ -12,17 +13,24 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authStateProvider);
+
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Skin Safe',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme().themeData(),
-      onGenerateRoute: ((settings) => Routes.generateRoute(settings)),
-      home: const HomeScreen(),
+      onGenerateRoute: (settings) => Routes.generateRoute(settings),
+      home: authState.when(
+        data: (user) =>
+            user != null ? const HomeScreen() : const SignUpScreen(),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => const Center(child: Text('Error loading app')),
+      ),
     );
   }
 }

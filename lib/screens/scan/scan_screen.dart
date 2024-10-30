@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:skin_safe_app/components/custom_app_bar.dart';
-import 'package:skin_safe_app/components/custom_drawer.dart';
-import 'package:skin_safe_app/components/custom_text.dart';
+import 'package:skin_safe_app/components/custom_widgets/custom_app_bar.dart';
+import 'package:skin_safe_app/components/custom_widgets/custom_drawer.dart';
+import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
 
 class ScanScreen extends StatelessWidget {
@@ -11,6 +11,7 @@ class ScanScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: AppColors.logoColor,
         endDrawer: customDrawer(context: context),
         appBar: customAppBar(title: "Scan Your Skin"),
         body: Padding(
@@ -52,16 +53,7 @@ class ScanScreen extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: AppColors.whiteColor,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.blackColor.withOpacity(0.1),
-                blurRadius: 5.0,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
+          color: AppColors.logoColor,
           child: SizedBox(
             height: 80,
             child: Row(

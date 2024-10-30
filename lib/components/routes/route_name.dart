@@ -10,4 +10,8 @@ class RouteName {
   static const String educationScreen = 'education-screen';
 
   static const String aboutScreen = 'about-screen';
+
+  static const String loginScreen = 'login-screen';
+
+  static const String signupScreen = 'signup-screen';
 }

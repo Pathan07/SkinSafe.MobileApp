@@ -8,6 +8,8 @@ class AppColors {
   static const Color backGroudColor = Color.fromARGB(244, 255, 255, 255);
   static const Color appBarColor = Colors.transparent;
   
+  static const Color logoColor = Color(0xFF16A39E);
+  
 
   // static const Color backGroudColor = Color.fromRGBO(30, 32, 34, 255);
   static const Color backGroundColorWithOpacityh =
