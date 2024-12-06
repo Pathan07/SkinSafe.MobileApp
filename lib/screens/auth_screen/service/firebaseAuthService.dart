@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:skin_safe_app/components/utilities/color.dart';
 
 class FirebaseAuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -66,32 +67,6 @@ class FirebaseAuthService {
     return null;
   }
 
-  // Future<User?> signInWithEmailAndPassword(
-  //     String email, String password, BuildContext context) async {
-  //   try {
-  //     final credential = await FirebaseAuth.instance
-  //         .signInWithEmailAndPassword(email: email, password: password);
-  //     return credential.user;
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'user-not-found') {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //             content: Text('No user found for that email.'),
-  //             backgroundColor: Colors.red),
-  //       );
-  //     } else if (e.code == 'wrong-password') {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //             content: Text('Wrong password provided for that user.'),
-  //             backgroundColor: Colors.red),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     print("Error: $e");
-  //   }
-  //   return null;
-  // }
-
   Future<User?> loginUser(
     String email,
     String password,
@@ -128,6 +103,24 @@ class FirebaseAuthService {
         );
       }
       return null;
+    }
+  }
+  Future<void> sendPasswordResetEmail(
+      String email, BuildContext context) async {
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Password reset email sent'),
+            backgroundColor: AppColors.alertColor),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: AppColors.alertColor,
+        ),
+      );
     }
   }
 }

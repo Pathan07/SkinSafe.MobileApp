@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skin_safe_app/components/routes/route_name.dart';
 import 'package:skin_safe_app/screens/about/about_screen.dart';
 import 'package:skin_safe_app/screens/auth_screen/login_screen.dart';
+import 'package:skin_safe_app/screens/auth_screen/widgets/forget_password.dart';
 import 'package:skin_safe_app/screens/auth_screen/widgets/sign_up_screen.dart';
 import 'package:skin_safe_app/screens/education/education_screen.dart';
 import 'package:skin_safe_app/screens/history/history_screen.dart';
@@ -34,7 +35,7 @@ class Routes {
 
       case RouteName.educationScreen:
         return MaterialPageRoute(
-          builder: (_) => const EducationScreen(),
+          builder: (_) => EducationScreen(),
         );
 
       case RouteName.aboutScreen:
@@ -46,9 +47,15 @@ class Routes {
         return MaterialPageRoute(
           builder: (_) => const LoginScreen(),
         );
+
       case RouteName.signupScreen:
         return MaterialPageRoute(
           builder: (_) => const SignUpScreen(),
+        );
+        
+      case RouteName.forgetPassword:
+        return MaterialPageRoute(
+          builder: (_) => const ForgotPassword(),
         );
 
       default:

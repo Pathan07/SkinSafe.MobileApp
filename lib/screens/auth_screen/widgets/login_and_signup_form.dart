@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
+import 'package:skin_safe_app/controllers/password_eye_toggle_controller.dart';
 
 final isLoadingProvider = StateProvider<bool>((ref) => false);
 
@@ -17,6 +18,8 @@ Widget signupForm({
   return Consumer(
     builder: (context, ref, child) {
       final isLoading = ref.watch(isLoadingProvider);
+      final isObscure = ref.watch(passwordVisibilityProvider);
+
       return Form(
         key: formKey,
         child: Column(
@@ -104,6 +107,16 @@ Widget signupForm({
               child: TextFormField(
                 controller: passwordController,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: AppColors.blackColor,
+                    ),
+                    onPressed: () {
+                      print("Rebuild eye----");
+                      ref.read(passwordVisibilityProvider.notifier).toggle();
+                    },
+                  ),
                   filled: true,
                   fillColor: AppColors.whiteColor,
                   border: OutlineInputBorder(
@@ -113,7 +126,7 @@ Widget signupForm({
                   hintText: "Enter password",
                   errorStyle: const TextStyle(color: AppColors.whiteColor),
                 ),
-                obscureText: true,
+                obscureText: isObscure,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your password';
@@ -210,10 +223,12 @@ Widget loginForm({
   required TextEditingController emailController,
   required TextEditingController passwordController,
   required VoidCallback onTap,
+  required VoidCallback forgetPassword,
 }) {
   return Consumer(
     builder: (context, ref, child) {
       final isLoading = ref.watch(isLoadingProvider);
+      final isObscure = ref.watch(passwordVisibilityProvider);
 
       return Form(
         key: formKey,
@@ -259,8 +274,17 @@ Widget loginForm({
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: TextFormField(
                 controller: passwordController,
-                obscureText: true,
+                obscureText: isObscure,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: AppColors.blackColor,
+                    ),
+                    onPressed: () {
+                      ref.read(passwordVisibilityProvider.notifier).toggle();
+                    },
+                  ),
                   filled: true,
                   fillColor: AppColors.whiteColor,
                   border: OutlineInputBorder(
@@ -280,12 +304,16 @@ Widget loginForm({
                 },
               ),
             ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(right: 15),
+            TextButton(
+              onPressed: forgetPassword,
+              style: TextButton.styleFrom(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 15),
+                minimumSize: const Size(
+                    double.infinity, 0), 
+              ),
               child: const Text(
                 'Forgot password?',
-                textAlign: TextAlign.end,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,

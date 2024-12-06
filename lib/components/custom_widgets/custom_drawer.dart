@@ -5,6 +5,7 @@ import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/routes/route_name.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
 import 'package:skin_safe_app/controllers/edit_profile_controller.dart';
+import 'package:skin_safe_app/controllers/google_login.controller.dart';
 
 Widget customDrawer({required BuildContext context}) {
   return Drawer(
@@ -130,10 +131,10 @@ Widget signOut() {
           print({user!.providerData});
           for (var userInfo in user.providerData) {
             switch (userInfo.providerId) {
-              // case 'google.com':
-              //   await ref.read(googleAuthControllerProvider.notifier).signOut();
-              //   print('Signed out with Google');
-              //   break;
+              case 'google.com':
+                await ref.read(googleLoginProvider.notifier).signOut();
+                print('Signed out with Google');
+                break;
 
               case 'password':
                 await FirebaseAuth.instance.signOut();

@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "920129677321",
     "project_id": "skinsafeapp-fdcdb",
-    "storage_bucket": "skinsafeapp-fdcdb.appspot.com"
+    "storage_bucket": "skinsafeapp-fdcdb.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +12,20 @@
           "package_name": "com.desmond.skin_safe_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "920129677321-ar66edogjlr57ur5ihib57kaem5bie50.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.desmond.skin_safe_app",
+            "certificate_hash": "6afc1ac26e3ffd166707f591a5dd9107c0c21868"
+          }
+        },
+        {
+          "client_id": "920129677321-kkdl1r0ukb1nq55qjp2sjtmqo4770ggf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAGUeX99vAghgczy_vtGjiN8VCuFxxyj0c"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920129677321-kkdl1r0ukb1nq55qjp2sjtmqo4770ggf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "920129677321-feigfcvfc7vb2bjeuu9gdeclj8e4djgk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.skinSafeApp"
+              }
+            }
+          ]
         }
       }
     }

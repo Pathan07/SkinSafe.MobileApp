@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -54,7 +51,7 @@ class DefaultFirebaseOptions {
     appId: '1:920129677321:android:19418e22e7ee739a8ef0d8',
     messagingSenderId: '920129677321',
     projectId: 'skinsafeapp-fdcdb',
-    storageBucket: 'skinsafeapp-fdcdb.appspot.com',
+    storageBucket: 'skinsafeapp-fdcdb.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,7 +59,17 @@ class DefaultFirebaseOptions {
     appId: '1:920129677321:ios:e67edf02ee7933de8ef0d8',
     messagingSenderId: '920129677321',
     projectId: 'skinsafeapp-fdcdb',
-    storageBucket: 'skinsafeapp-fdcdb.appspot.com',
+    storageBucket: 'skinsafeapp-fdcdb.firebasestorage.app',
     iosBundleId: 'com.example.skinSafeApp',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCQ-HE91GT6mfXQMucZuJB6isrRmEY_Kz8',
+    appId: '1:920129677321:web:c1136d12a6b5d29b8ef0d8',
+    messagingSenderId: '920129677321',
+    projectId: 'skinsafeapp-fdcdb',
+    authDomain: 'skinsafeapp-fdcdb.firebaseapp.com',
+    storageBucket: 'skinsafeapp-fdcdb.firebasestorage.app',
+  );
+
 }

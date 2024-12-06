@@ -14,4 +14,6 @@ class RouteName {
   static const String loginScreen = 'login-screen';
 
   static const String signupScreen = 'signup-screen';
+
+  static const String forgetPassword = 'forget-password-screen';
 }

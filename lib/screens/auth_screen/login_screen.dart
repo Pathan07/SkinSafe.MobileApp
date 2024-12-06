@@ -43,6 +43,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     try {
       User? user = await authService.loginUser(email, password, context);
       if (user != null) {
+        // print(user.email);
+        print(user.providerData);
         Navigator.pushNamedAndRemoveUntil(
           context,
           RouteName.homeScreen,
@@ -62,7 +64,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      appBar: AppBar(iconTheme: const IconThemeData(color: AppColors.whiteColor),),
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: AppColors.whiteColor),
+      ),
       backgroundColor: AppColors.logoColor,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -83,6 +87,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   return Column(
                     children: [
                       loginForm(
+                        forgetPassword: () {
+                          Navigator.pushNamed(context, RouteName.forgetPassword);
+                        },
                         formKey: formKey,
                         onTap: () {
                           if (formKey.currentState!.validate()) {

@@ -58,6 +58,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           'https://www.gstatic.com/images/branding/product/1x/avatar_square_blue_512dp.png',
           context);
       if (user != null) {
+        print(user.providerData);
         ref.read(showBackButtonProvider.notifier).state = false;
         if (mounted) {
           Navigator.pushNamedAndRemoveUntil(
@@ -79,6 +80,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     print("Rebuild.............");
+    print("Rebuild eye----");
     final authState = ref.watch(authStateProvider);
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
