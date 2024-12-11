@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/routes/route_name.dart';
-
 import 'package:skin_safe_app/components/utilities/color.dart';
 import 'package:skin_safe_app/components/utilities/images.dart';
 import 'package:skin_safe_app/screens/auth_screen/service/FirebaseAuthService.dart';

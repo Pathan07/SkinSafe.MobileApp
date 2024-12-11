@@ -53,52 +53,12 @@ Widget customDrawer({required BuildContext context}) {
         ),
         ListTile(
           leading: const Icon(
-            Icons.home,
-            color: AppColors.logoColor,
-          ),
-          title: textSize16(text: "Home", fontWeight: FontWeight.normal),
-          onTap: () {
-            Navigator.pushReplacementNamed(context, RouteName.homeScreen);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.camera_alt,
-            color: AppColors.logoColor,
-          ),
-          title: textSize16(text: "Scan", fontWeight: FontWeight.normal),
-          onTap: () {
-            Navigator.pushReplacementNamed(context, RouteName.scanScreen);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.history,
-            color: AppColors.logoColor,
-          ),
-          title: textSize16(text: "History", fontWeight: FontWeight.normal),
-          onTap: () {
-            Navigator.pushReplacementNamed(context, RouteName.historyScreen);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
             Icons.school,
             color: AppColors.logoColor,
           ),
           title: textSize16(text: "Education", fontWeight: FontWeight.normal),
           onTap: () {
-            Navigator.pushReplacementNamed(context, RouteName.educationScreen);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.person,
-            color: AppColors.logoColor,
-          ),
-          title: textSize16(text: "Profile", fontWeight: FontWeight.normal),
-          onTap: () {
-            Navigator.pushReplacementNamed(context, RouteName.profileScreen);
+            Navigator.pushNamed(context, RouteName.educationScreen);
           },
         ),
         ListTile(
@@ -108,7 +68,7 @@ Widget customDrawer({required BuildContext context}) {
           ),
           title: textSize16(text: "About", fontWeight: FontWeight.normal),
           onTap: () {
-            Navigator.pushReplacementNamed(context, RouteName.aboutScreen);
+            Navigator.pushNamed(context, RouteName.aboutScreen);
           },
         ),
         signOut(),

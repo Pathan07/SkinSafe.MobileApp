@@ -5,9 +5,9 @@ PreferredSizeWidget customAppBar({
   required String title,
 }) {
   return PreferredSize(
-    preferredSize: const Size(double.infinity, 90),
+    preferredSize: const Size(double.infinity, 50),
     child: Padding(
-      padding: const EdgeInsets.only(top: 25.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: AppBar(
         backgroundColor: Colors.transparent,
         title: textSize25(text: title),

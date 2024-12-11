@@ -58,11 +58,10 @@ class ProfileScreen extends ConsumerWidget {
                   controller: emailController,
                   isReadAble: true,
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 0),
                   width: double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -87,11 +86,12 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 30),
               ],
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator(color: AppColors.whiteColor)),
         error: (error, stackTrace) => Center(
           child: Center(
               child: textSize18(

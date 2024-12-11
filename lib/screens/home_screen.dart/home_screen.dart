@@ -5,6 +5,7 @@ import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/routes/route_name.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
 import 'package:skin_safe_app/components/utilities/images.dart';
+import 'package:skin_safe_app/screens/home_screen.dart/widgets/home_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,21 +16,23 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.logoColor,
         endDrawer: customDrawer(context: context),
-        appBar: customAppBar(title: "Welcome to SkinSafe"),
+        appBar: customAppBar(title: "Dashboard"),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.only(
+                    left: 20.0, right: 20,  bottom: 10),
                 child: CircleAvatar(
-                  radius: 80,
+                  radius: 50,
                   child: ClipOval(
-                    child: Image.asset(
-                      ImageRes.skinSafeLogo,
-                    ),
+                    child: Image.asset(ImageRes.skinSafeLogo),
                   ),
                 ),
               ),
+              textSize20(
+                  text: "Welcome to SkinSafe",
+                  color: AppColors.textPrimaryColor),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
@@ -37,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                   shrinkWrap: true,
                   mainAxisSpacing: 5,
                   crossAxisSpacing: 5,
-                  childAspectRatio: 0.95,
+                  childAspectRatio: 1,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   children: [
@@ -77,63 +80,11 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              // const SizedBox(height: 30,)
             ],
           ),
         ),
       ),
     );
   }
-}
-
-Widget homeCardWidget(
-    {required IconData icon,
-    required Color iconColor,
-    required String text,
-    VoidCallback? onTap,
-    required String subTitle}) {
-  return InkWell(
-    onTap: onTap,
-    child: Card(
-      elevation: 4,
-      color: AppColors.whiteColor,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: 8.0,
-          left: 8,
-          right: 8,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  icon,
-                  color: iconColor,
-                  size: 35,
-                ),
-                Expanded(
-                  child: Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: textSize16(
-                          text: text,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child:
-                  textSize14(text: subTitle, overFlow: TextOverflow.ellipsis),
-            )
-          ],
-        ),
-      ),
-    ),
-  );
 }

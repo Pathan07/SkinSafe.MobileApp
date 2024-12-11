@@ -12,8 +12,8 @@ class EditProfileTitleCard extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            height: 170,
-            width: 170,
+            height: 150,
+            width: 150,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
@@ -30,10 +30,10 @@ class EditProfileTitleCard extends StatelessWidget {
           ),
           Positioned(
             bottom: 0,
-            right: 20,
+            right: 18,
             child: Container(
-              height: 40,
-              width: 40,
+              height: 30,
+              width: 30,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.blackColor,
@@ -42,7 +42,7 @@ class EditProfileTitleCard extends StatelessWidget {
                   onPressed: () {},
                   icon: const Icon(
                     Icons.edit,
-                    size: 20,
+                    size: 15,
                     color: AppColors.whiteColor,
                   )),
             ),
