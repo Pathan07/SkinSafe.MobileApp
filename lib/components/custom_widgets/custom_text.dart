@@ -21,15 +21,34 @@ Widget textSize14({
   required String text,
   Color color = AppColors.textSeconderyColor,
   bool shouldEllipsize = false,
+  TextAlign algn = TextAlign.center,
   FontWeight fontWeight = FontWeight.normal,
-  required TextOverflow overFlow,
 }) {
   return Text(
+    textAlign: algn,
     text,
-    overflow: shouldEllipsize ? TextOverflow.ellipsis : TextOverflow.visible,
     style: TextStyle(
       color: color,
       fontSize: 14,
+      fontWeight: fontWeight,
+    ),
+  );
+}
+
+Widget textSize13({
+  required String text,
+  Color color = AppColors.textSeconderyColor,
+  bool shouldEllipsize = false,
+  TextOverflow overflow = TextOverflow.ellipsis,
+  FontWeight fontWeight = FontWeight.normal,
+}) {
+  return Text(
+    text,
+    maxLines: 1,
+    overflow: overflow,
+    style: TextStyle(
+      color: color,
+      fontSize: 13,
       fontWeight: fontWeight,
     ),
   );

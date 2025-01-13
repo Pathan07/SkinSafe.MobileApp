@@ -20,6 +20,7 @@ class _ChatBotState extends ConsumerState<ChatBot> {
       backgroundColor: AppColors.logoColor,
       appBar: customAppBar(title: 'Skin Safe Bot'),
       endDrawer: customDrawer(context: context),
+      
     );
   }
 }

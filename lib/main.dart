@@ -5,7 +5,7 @@ import 'package:skin_safe_app/components/routes/route.dart';
 import 'package:skin_safe_app/components/utilities/theme.dart';
 import 'package:skin_safe_app/firebase_options.dart';
 import 'package:skin_safe_app/screens/auth_screen/widgets/sign_up_screen.dart';
-import 'package:skin_safe_app/screens/initinal_screen.dart';
+import 'package:skin_safe_app/screens/home%20screen/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,7 @@ class MyApp extends ConsumerWidget {
       onGenerateRoute: (settings) => Routes.generateRoute(settings),
       home: authState.when(
         data: (user) =>
-            user != null ? const InitinalScreen() : const SignUpScreen(),
+            user != null ? const HomeScreen() : const SignUpScreen(),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => const Center(child: Text('Error loading app')),
       ),
