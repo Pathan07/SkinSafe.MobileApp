@@ -25,7 +25,7 @@ class ProfileTextFields extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: textSize16(
-              color: AppColors.textPrimaryColor,
+              color: AppColors.textSeconderyColor,
               text: name!,
             ),
           ),

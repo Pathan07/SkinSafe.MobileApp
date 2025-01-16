@@ -6,6 +6,7 @@ import 'package:skin_safe_app/screens/about/about_screen.dart';
 import 'package:skin_safe_app/screens/auth_screen/login_screen.dart';
 import 'package:skin_safe_app/screens/auth_screen/widgets/forget_password.dart';
 import 'package:skin_safe_app/screens/auth_screen/widgets/sign_up_screen.dart';
+import 'package:skin_safe_app/screens/chat_bot/chat_bot.dart';
 import 'package:skin_safe_app/screens/doctor%20section/doctor%20chat/chat_screen.dart';
 import 'package:skin_safe_app/screens/doctor%20section/doctor%20history/doctor_profile_history.dart';
 import 'package:skin_safe_app/screens/education/education_screen.dart';
@@ -63,7 +64,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (_) => const AboutScreen(),
         );
-        
+
       case RouteName.doctorChat:
         return MaterialPageRoute(
           builder: (_) => const ChatScreen(),
@@ -72,6 +73,10 @@ class Routes {
       case RouteName.loginScreen:
         return MaterialPageRoute(
           builder: (_) => const LoginScreen(),
+        );
+      case RouteName.skinSafeBot:
+        return MaterialPageRoute(
+          builder: (_) => const SkinSafeBot(),
         );
 
       case RouteName.signupScreen:

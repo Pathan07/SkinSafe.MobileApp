@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skin_safe_app/components/custom_widgets/custom_app_bar.dart';
+import 'package:skin_safe_app/components/custom_widgets/custom_buttons.dart';
 import 'package:skin_safe_app/components/custom_widgets/custom_drawer.dart';
 import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
@@ -18,8 +18,11 @@ class ProfileScreen extends ConsumerWidget {
     final profileData = ref.watch(editProfileProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.logoColor,
-      appBar: customAppBar(title: 'Edit Profile'),
+      backgroundColor: AppColors.whiteColor,
+      appBar: AppBar(
+        title: textSize20(text: 'Edit Profile'),
+        centerTitle: true,
+      ),
       endDrawer: customDrawer(
         context: context,
       ),
@@ -34,9 +37,12 @@ class ProfileScreen extends ConsumerWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
-                EditProfileTitleCard(
-                  imagURL: data.imgURL ??
-                      'https://www.gstatic.com/images/branding/product/1x/avatar_square_blue_512dp.png',
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: EditProfileTitleCard(
+                    imagURL: data.imgURL ??
+                        'https://www.gstatic.com/images/branding/product/1x/avatar_square_blue_512dp.png',
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
@@ -54,29 +60,22 @@ class ProfileScreen extends ConsumerWidget {
                     controller: emailController,
                     isReadAble: true),
                 const SizedBox(height: 20),
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+                SizedBox(
                   width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.blackColor),
-                      onPressed: () {
-                        final updatedProfile = UserData(
-                            firstName: firstNameController.text,
-                            lastName: lastNameController.text,
-                            imgURL: data.imgURL,
-                            email: emailController.text);
-                        ref
-                            .read(editProfileProvider.notifier)
-                            .updateProfile(updatedProfile);
-                      },
-                      child: textSize20(
-                          color: AppColors.textPrimaryColor,
-                          text: "Update Profile"),
-                    ),
+                  child: customButton(
+                    textColor: AppColors.textPrimaryColor,
+                    backgroundColor: AppColors.blackColor,
+                    text: "Update Profile",
+                    onTap: () {
+                      final updatedProfile = UserData(
+                          firstName: firstNameController.text,
+                          lastName: lastNameController.text,
+                          imgURL: data.imgURL,
+                          email: emailController.text);
+                      ref
+                          .read(editProfileProvider.notifier)
+                          .updateProfile(updatedProfile);
+                    },
                   ),
                 ),
                 const SizedBox(height: 30),

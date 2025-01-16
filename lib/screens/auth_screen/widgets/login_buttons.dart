@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
 import 'package:skin_safe_app/components/utilities/images.dart';
-import 'package:skin_safe_app/controllers/google_login.controller.dart';
 
 Widget homeScreenLoginButtons({required WidgetRef ref}) {
   return SeabeeStudyLoginButtons(
     onTap: () async {
       print("Click Google btn");
-      await ref.read(googleLoginProvider.notifier).signInWithGoogle();
+      // await ref.read(googleLoginProvider.notifier).signInWithGoogle();
     },
     icon: ImageRes.googleLogo,
   );

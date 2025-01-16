@@ -53,6 +53,16 @@ Widget customDrawer({required BuildContext context}) {
         ),
         ListTile(
           leading: const Icon(
+            Icons.person,
+            color: AppColors.logoColor,
+          ),
+          title: textSize16(text: "Profile", fontWeight: FontWeight.normal),
+          onTap: () {
+            Navigator.pushNamed(context, RouteName.profileScreen);
+          },
+        ),
+        ListTile(
+          leading: const Icon(
             Icons.school,
             color: AppColors.logoColor,
           ),
@@ -69,6 +79,17 @@ Widget customDrawer({required BuildContext context}) {
           title: textSize16(text: "About", fontWeight: FontWeight.normal),
           onTap: () {
             Navigator.pushNamed(context, RouteName.aboutScreen);
+          },
+        ),
+        ListTile(
+          leading: const Icon(
+            Icons.auto_awesome_sharp,
+            color: AppColors.logoColor,
+          ),
+          title:
+              textSize16(text: "Skin Safe Bot", fontWeight: FontWeight.normal),
+          onTap: () {
+            Navigator.pushNamed(context, RouteName.skinSafeBot);
           },
         ),
         signOut(),

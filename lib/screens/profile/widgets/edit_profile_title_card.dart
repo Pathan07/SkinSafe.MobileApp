@@ -18,7 +18,7 @@ class EditProfileTitleCard extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(
                 width: 3,
-                color: AppColors.whiteColor,
+                color: AppColors.logoColor,
               ),
               image: DecorationImage(
                 image: NetworkImage(

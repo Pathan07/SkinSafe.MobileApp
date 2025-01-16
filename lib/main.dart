@@ -5,10 +5,13 @@ import 'package:skin_safe_app/components/routes/route.dart';
 import 'package:skin_safe_app/components/utilities/theme.dart';
 import 'package:skin_safe_app/firebase_options.dart';
 import 'package:skin_safe_app/screens/auth_screen/widgets/sign_up_screen.dart';
+import 'package:skin_safe_app/screens/chat_bot/chat_bot.dart';
 import 'package:skin_safe_app/screens/home%20screen/home_screen.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Gemini.init(apiKey: giminiApiKey);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ProviderScope(child: MyApp()));
 }
