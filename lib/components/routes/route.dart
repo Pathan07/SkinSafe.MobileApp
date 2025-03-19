@@ -31,12 +31,12 @@ class Routes {
 
       case RouteName.skinAnalysisScreen:
         return MaterialPageRoute(
-          builder: (_) => const SkinAnalysis(),
+          builder: (_) => const MelanomaDetector(),
         );
 
       case RouteName.historyScreen:
         return MaterialPageRoute(
-          builder: (_) => const HistoryScreen(),
+          builder: (_) => const HistoryScreen1(),
         );
 
       case RouteName.scanOutputScreen:
