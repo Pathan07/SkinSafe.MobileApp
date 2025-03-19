@@ -98,7 +98,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         emailController: emailController,
                         passwordController: passwordController,
                       ),
-                      homeScreenLoginButtons(ref: ref),
+                      // homeScreenLoginButtons(ref: ref),
                       const SizedBox(height: 20),
                     ],
                   );

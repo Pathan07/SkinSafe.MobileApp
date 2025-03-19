@@ -21,7 +21,7 @@ Widget customDrawer({required BuildContext context}) {
                 data: (data) {
                   return ListTile(
                     leading: CircleAvatar(
-                        backgroundColor: AppColors.blackColor,
+                        backgroundColor: AppColors.whiteColor,
                         backgroundImage: NetworkImage(
                           data.imgURL ??
                               'https://www.gstatic.com/images/branding/product/1x/avatar_square_blue_512dp.png',
@@ -71,16 +71,16 @@ Widget customDrawer({required BuildContext context}) {
             Navigator.pushNamed(context, RouteName.educationScreen);
           },
         ),
-        ListTile(
-          leading: const Icon(
-            Icons.info,
-            color: AppColors.logoColor,
-          ),
-          title: textSize16(text: "About", fontWeight: FontWeight.normal),
-          onTap: () {
-            Navigator.pushNamed(context, RouteName.aboutScreen);
-          },
-        ),
+        // ListTile(
+        //   leading: const Icon(
+        //     Icons.info,
+        //     color: AppColors.logoColor,
+        //   ),
+        //   title: textSize16(text: "About", fontWeight: FontWeight.normal),
+        //   onTap: () {
+        //     Navigator.pushNamed(context, RouteName.aboutScreen);
+        //   },
+        // ),
         ListTile(
           leading: const Icon(
             Icons.auto_awesome_sharp,

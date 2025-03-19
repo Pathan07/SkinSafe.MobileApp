@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skin_safe_app/components/utilities/color.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
@@ -54,11 +55,11 @@ class MelanomaDetector extends StatefulWidget {
 class _MelanomaDetectorState extends State<MelanomaDetector> {
   Interpreter? _interpreter;
   bool _isLoaded = false;
-  String _modelInfo = "Loading model...";
+  String modelInfo = "Loading model...";
   List<int>? _inputShape;
   List<int>? _outputShape;
-  String _inputTypeStr = "";
-  String _outputTypeStr = "";
+  String inputTypeStr = "";
+  String outputTypeStr = "";
 
   File? _selectedImage;
   final picker = ImagePicker();
@@ -76,7 +77,8 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
   Future<void> _loadModel() async {
     try {
       // Initialize interpreter with the model file path
-      _interpreter = await Interpreter.fromAsset('assets/dataset/melanoma_detection_model.tflite');
+      _interpreter = await Interpreter.fromAsset(
+          'assets/dataset/melanoma_detection_model.tflite');
 
       // Get input and output details
       var inputTensor = _interpreter!.getInputTensor(0);
@@ -86,17 +88,17 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
       _outputShape = outputTensor.shape;
 
       // Store type information as strings
-      _inputTypeStr = inputTensor.type.toString();
-      _outputTypeStr = outputTensor.type.toString();
+      inputTypeStr = inputTensor.type.toString();
+      outputTypeStr = outputTensor.type.toString();
 
       setState(() {
         _isLoaded = true;
-        _modelInfo = "Model loaded successfully";
+        modelInfo = "Model loaded successfully";
       });
     } catch (e) {
       print('Error loading model: $e');
       setState(() {
-        _modelInfo = "Error loading model: $e";
+        modelInfo = "Error loading model: $e";
       });
     }
   }
@@ -142,8 +144,11 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
 
         // Simple skin tone detection
         // Based on RGB ratios typical in skin tones
-        if (r > 60 && g > 40 && b > 20 &&
-            r > g && g > b &&
+        if (r > 60 &&
+            g > 40 &&
+            b > 20 &&
+            r > g &&
+            g > b &&
             (r - g) > 15 &&
             (r - g) < 100) {
           skinPixels++;
@@ -160,11 +165,13 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
   }
 
   // Save scan result to history
-  Future<void> _saveScanToHistory(String diagnosis, double percentage, File imageFile) async {
+  Future<void> _saveScanToHistory(
+      String diagnosis, double percentage, File imageFile) async {
     try {
       // Create a unique ID for this scan
       String id = DateTime.now().millisecondsSinceEpoch.toString();
-      String date = DateTime.now().toString().split(' ')[0]; // YYYY-MM-DD format
+      String date =
+          DateTime.now().toString().split(' ')[0]; // YYYY-MM-DD format
 
       // Copy image to app documents directory for persistent storage
       final directory = await getApplicationDocumentsDirectory();
@@ -198,9 +205,13 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
 
   // Process the image and make prediction
   Future<void> _processSkinImage() async {
-    if (_interpreter == null || _selectedImage == null || _inputShape == null || _outputShape == null) {
+    if (_interpreter == null ||
+        _selectedImage == null ||
+        _inputShape == null ||
+        _outputShape == null) {
       setState(() {
-        _prediction = "Cannot process image: Model not loaded properly or no image selected";
+        _prediction =
+            "Cannot process image: Model not loaded properly or no image selected";
       });
       return;
     }
@@ -212,8 +223,7 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
 
     try {
       // Read the image using the correct Command approach
-      final command = img.Command()
-        ..decodeImageFile(_selectedImage!.path);
+      final command = img.Command()..decodeImageFile(_selectedImage!.path);
       final decodedImage = await command.getImage();
 
       if (decodedImage == null) {
@@ -235,7 +245,7 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
       }
 
       // Resize image to match model input
-      final inputHeight = _inputShape![1];  // Assuming NHWC format
+      final inputHeight = _inputShape![1]; // Assuming NHWC format
       final inputWidth = _inputShape![2];
 
       // Use the correct resize syntax
@@ -255,17 +265,12 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
       // Create properly shaped input tensor
       var inputBuffer = List.generate(
           1,
-              (_) => List.generate(
+          (_) => List.generate(
               inputHeight,
-                  (_) => List.generate(
-                  inputWidth,
-                      (_) => List.filled(3, 0.0),
-                  growable: false
-              ),
-              growable: false
-          ),
-          growable: false
-      );
+              (_) => List.generate(inputWidth, (_) => List.filled(3, 0.0),
+                  growable: false),
+              growable: false),
+          growable: false);
 
       // Extract pixel data correctly
       for (int y = 0; y < inputHeight; y++) {
@@ -283,10 +288,8 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
 
       // Prepare output buffer with the correct shape [1,1]
       var outputBuffer = List.generate(
-          _outputShape![0],
-              (_) => List.filled(_outputShape![1], 0.0),
-          growable: false
-      );
+          _outputShape![0], (_) => List.filled(_outputShape![1], 0.0),
+          growable: false);
 
       // Run inference
       _interpreter!.run(inputBuffer, outputBuffer);
@@ -295,7 +298,7 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
       _predictionPercentage = outputBuffer[0][0] * 100;
 
       // Add a delay to show scanning effect (1 second)
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
 
       // Determine diagnosis based on percentage
       String diagnosis;
@@ -311,7 +314,8 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
       }
 
       // Save scan to history
-      await _saveScanToHistory(diagnosis, _predictionPercentage, _selectedImage!);
+      await _saveScanToHistory(
+          diagnosis, _predictionPercentage, _selectedImage!);
 
       setState(() {
         _isProcessing = false;
@@ -321,7 +325,7 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
       // Navigate based on diagnosis
       if (isSafe) {
         // Navigate to safe screen after brief delay
-        Future.delayed(Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 300), () {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -351,20 +355,20 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
   @override
   Widget build(BuildContext context) {
     // Define colors to match new theme
-    final Color logoColor = Colors.lightGreen.shade300; // Changed to light green
+    final Color logoColor = Colors.lightGreen.shade300;
     final Color textPrimaryColor = Colors.white;
     final Color textSecondaryColor = Colors.black87;
     final Color whiteColor = Colors.white;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Skin Analysis',
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20, color: AppColors.textPrimaryColor),
         ),
         centerTitle: true,
-        backgroundColor: Colors.lightGreen.shade100, // Changed to light green
-        actions: [
+        backgroundColor: AppColors.logoColor,
+        actions: const [
           // Added history button in app bar
           // IconButton(
           //   icon: Icon(Icons.history),
@@ -398,8 +402,8 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10, left: 10, bottom: 10),
+            const Padding(
+              padding: EdgeInsets.only(right: 10, left: 10, bottom: 10),
               child: Text(
                 "Please upload a clear photo of skin for analysis. Ensure good lighting and focus on the area of concern.",
                 style: TextStyle(
@@ -420,52 +424,52 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
                   borderRadius: BorderRadius.circular(10),
                   child: _selectedImage != null
                       ? Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image.file(
-                        _selectedImage!,
-                        fit: BoxFit.cover,
-                      ),
-                      if (_isProcessing)
-                        Container(
-                          color: Colors.black54,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                              SizedBox(height: 16),
-                              Text(
-                                "Scanning...",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                          fit: StackFit.expand,
+                          children: [
+                            Image.file(
+                              _selectedImage!,
+                              fit: BoxFit.cover,
+                            ),
+                            if (_isProcessing)
+                              Container(
+                                color: Colors.black54,
+                                child: const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      "Scanning...",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  )
+                          ],
+                        )
                       : const Center(
-                    child: Text('No image selected.'),
-                  ),
+                          child: Text('No image selected.'),
+                        ),
                 ),
               ),
             ),
-            Center(
+            const Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(vertical: 10),
                 child: Text(
                   "Accepted file types: JPG, PNG",
                   style: TextStyle(fontSize: 13),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10, left: 10, bottom: 20),
+            const Padding(
+              padding: EdgeInsets.only(right: 10, left: 10, bottom: 20),
               child: Text(
                 "Our melanoma detection process uses advanced AI to analyze your skin photo and provide a detailed report.",
                 style: TextStyle(
@@ -476,7 +480,10 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
             ),
 
             // Only show prediction if available and image is selected and not processing
-            if (_prediction.isNotEmpty && _selectedImage != null && !_isProcessing && !_prediction.contains("You don't have cancer"))
+            if (_prediction.isNotEmpty &&
+                _selectedImage != null &&
+                !_isProcessing &&
+                !_prediction.contains("You don't have cancer"))
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -487,20 +494,23 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: _prediction.contains("High risk") ? Colors.red :
-                        _prediction.contains("Low risk") ? Colors.orange : Colors.black,
+                        color: _prediction.contains("High risk")
+                            ? Colors.red
+                            : _prediction.contains("Low risk")
+                                ? Colors.orange
+                                : Colors.black,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     if (_prediction.contains("risk"))
                       Text(
                         'Melanoma probability: ${_predictionPercentage.toStringAsFixed(2)}%',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Progress indicator for the prediction percentage
                     if (_prediction.contains("risk"))
@@ -508,7 +518,9 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
                         value: _predictionPercentage / 100,
                         backgroundColor: Colors.grey.shade300,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          _predictionPercentage > 50 ? Colors.red : Colors.orange,
+                          _predictionPercentage > 50
+                              ? Colors.red
+                              : Colors.orange,
                         ),
                         minHeight: 10,
                       ),
@@ -524,23 +536,27 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton.icon(
-              onPressed: _isLoaded && !_isProcessing ? _pickImageFromGallery : null,
+              onPressed:
+                  _isLoaded && !_isProcessing ? _pickImageFromGallery : null,
               icon: Icon(Icons.image, color: whiteColor),
-              label: Text("Gallery"),
+              label: const Text("Gallery"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: logoColor,
+                backgroundColor: AppColors.logoColor,
                 foregroundColor: whiteColor,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
             ),
             ElevatedButton.icon(
-              onPressed: _isLoaded && !_isProcessing ? _pickImageFromCamera : null,
+              onPressed:
+                  _isLoaded && !_isProcessing ? _pickImageFromCamera : null,
               icon: Icon(Icons.camera_alt, color: whiteColor),
-              label: Text("Camera"),
+              label: const Text("Camera"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: logoColor,
+                backgroundColor: AppColors.logoColor,
                 foregroundColor: whiteColor,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
             ),
           ],
@@ -555,23 +571,21 @@ class SafeResultScreen extends StatelessWidget {
   final double percentage;
   final File image;
 
-  const SafeResultScreen({
-    Key? key,
-    required this.percentage,
-    required this.image
-  }) : super(key: key);
+  const SafeResultScreen(
+      {Key? key, required this.percentage, required this.image})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Analysis Results'),
+        title: const Text('Analysis Results'),
         backgroundColor: Colors.lightGreen.shade100,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Center(
               child: Container(
                 width: 150,
@@ -580,15 +594,15 @@ class SafeResultScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.lightGreen.shade100,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.check_circle,
                   color: Colors.green,
                   size: 100,
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               "You don't have cancer",
               style: TextStyle(
                 fontSize: 24,
@@ -597,27 +611,27 @@ class SafeResultScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 "Your skin analysis shows normal results with a very low risk factor of ${percentage.toStringAsFixed(2)}%.",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -634,34 +648,36 @@ class SafeResultScreen extends StatelessWidget {
                       dense: true,
                     ),
                     ListTile(
-                      leading: Icon(Icons.health_and_safety, color: Colors.lightGreen),
+                      leading: Icon(Icons.health_and_safety,
+                          color: Colors.lightGreen),
                       title: Text("Perform regular skin self-exams"),
                       dense: true,
                     ),
                     ListTile(
                       leading: Icon(Icons.calendar_today, color: Colors.blue),
-                      title: Text("Schedule annual skin check-ups with a dermatologist"),
+                      title: Text(
+                          "Schedule annual skin check-ups with a dermatologist"),
                       dense: true,
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             // Show the analyzed image
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Analyzed Image:",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.file(
@@ -674,7 +690,7 @@ class SafeResultScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -684,15 +700,15 @@ class SafeResultScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("Back to Scanner"),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.lightGreen.shade300,
             foregroundColor: Colors.white,
-            minimumSize: Size(double.infinity, 50),
+            minimumSize: const Size(double.infinity, 50),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
           ),
+          child: const Text("Back to Scanner"),
         ),
       ),
     );
@@ -751,100 +767,107 @@ class _HistoryScreenState1 extends State<HistoryScreen1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan History'),
-        backgroundColor: Colors.lightGreen.shade100,
+        title: const Text(
+          'Scan History',
+          style: TextStyle(color: AppColors.textPrimaryColor),
+        ),
+        backgroundColor: AppColors.logoColor,
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : _scanHistory.isEmpty
-          ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.history,
-              size: 80,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'No scan history found',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey.shade700,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Your scan results will appear here',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      )
-          : ListView.builder(
-        itemCount: _scanHistory.length,
-        itemBuilder: (context, index) {
-          final scan = _scanHistory[index];
-          final bool isSafe = scan.diagnosis.contains("don't have cancer");
-          final Color statusColor = isSafe
-              ? Colors.green
-              : scan.diagnosis.contains("High risk")
-              ? Colors.red
-              : Colors.orange;
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.history,
+                        size: 80,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No scan history found',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Your scan results will appear here',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: _scanHistory.length,
+                  itemBuilder: (context, index) {
+                    final scan = _scanHistory[index];
+                    final bool isSafe =
+                        scan.diagnosis.contains("don't have cancer");
+                    final Color statusColor = isSafe
+                        ? Colors.green
+                        : scan.diagnosis.contains("High risk")
+                            ? Colors.red
+                            : Colors.orange;
 
-          return Card(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ListTile(
-              leading: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(8),
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: ListTile(
+                        leading: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: statusColor.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            isSafe ? Icons.check_circle : Icons.warning,
+                            color: statusColor,
+                          ),
+                        ),
+                        title: Text(
+                          scan.date,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(scan.diagnosis),
+                            Text(
+                              'Risk: ${scan.percentage.toStringAsFixed(1)}%',
+                              style: TextStyle(
+                                color: statusColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        onTap: () {
+                          // Show detailed view when tapped
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ScanDetailScreen(scan: scan),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
-                child: Icon(
-                  isSafe ? Icons.check_circle : Icons.warning,
-                  color: statusColor,
-                ),
-              ),
-              title: Text(
-                scan.date,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(scan.diagnosis),
-                  Text(
-                    'Risk: ${scan.percentage.toStringAsFixed(1)}%',
-                    style: TextStyle(
-                      color: statusColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              trailing: Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () {
-                // Show detailed view when tapped
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ScanDetailScreen(scan: scan),
-                  ),
-                );
-              },
-            ),
-          );
-        },
-      ),
     );
   }
 }
+
 class ScanDetailScreen extends StatelessWidget {
   final ScanResult scan;
 
@@ -856,12 +879,12 @@ class ScanDetailScreen extends StatelessWidget {
     final Color statusColor = isSafe
         ? Colors.green
         : scan.diagnosis.contains("High risk")
-        ? Colors.red
-        : Colors.orange;
+            ? Colors.red
+            : Colors.orange;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan Details'),
+        title: const Text('Scan Details'),
         backgroundColor: Colors.lightGreen.shade100,
       ),
       body: SingleChildScrollView(
@@ -876,7 +899,7 @@ class ScanDetailScreen extends StatelessWidget {
                 File(scan.imagePath),
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
-                  return Center(
+                  return const Center(
                     child: Icon(
                       Icons.broken_image,
                       size: 64,
@@ -899,7 +922,7 @@ class ScanDetailScreen extends StatelessWidget {
                         isSafe ? Icons.check_circle : Icons.warning,
                         color: statusColor,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         scan.diagnosis,
                         style: TextStyle(
@@ -910,7 +933,7 @@ class ScanDetailScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     'Date: ${scan.date}',
                     style: TextStyle(
@@ -918,72 +941,78 @@ class ScanDetailScreen extends StatelessWidget {
                       color: Colors.grey.shade700,
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Risk assessment
-                  Text(
+                  const Text(
                     'Risk Assessment',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   LinearProgressIndicator(
                     value: scan.percentage / 100,
                     backgroundColor: Colors.grey.shade300,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      scan.percentage > 50 ? Colors.red :
-                      scan.percentage > 20 ? Colors.orange : Colors.green,
+                      scan.percentage > 50
+                          ? Colors.red
+                          : scan.percentage > 20
+                              ? Colors.orange
+                              : Colors.green,
                     ),
                     minHeight: 10,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     'Melanoma probability: ${scan.percentage.toStringAsFixed(2)}%',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Recommendations
-                  Text(
+                  const Text(
                     'Recommendations',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
                       children: [
-                        ListTile(
+                        const ListTile(
                           leading: Icon(Icons.wb_sunny, color: Colors.orange),
                           title: Text("Use sunscreen daily"),
                           dense: true,
                         ),
-                        ListTile(
-                          leading: Icon(Icons.health_and_safety, color: Colors.lightGreen),
+                        const ListTile(
+                          leading: Icon(Icons.health_and_safety,
+                              color: Colors.lightGreen),
                           title: Text("Perform regular skin self-exams"),
                           dense: true,
                         ),
                         if (scan.percentage > 20)
-                          ListTile(
-                            leading: Icon(Icons.local_hospital, color: Colors.red),
+                          const ListTile(
+                            leading:
+                                Icon(Icons.local_hospital, color: Colors.red),
                             title: Text("Consult a dermatologist soon"),
                             dense: true,
                           )
                         else
-                          ListTile(
-                            leading: Icon(Icons.calendar_today, color: Colors.blue),
+                          const ListTile(
+                            leading:
+                                Icon(Icons.calendar_today, color: Colors.blue),
                             title: Text("Schedule annual skin check-ups"),
                             dense: true,
                           ),
@@ -1002,11 +1031,11 @@ class ScanDetailScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("Back to History"),
+          child: const Text("Back to History"),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.lightGreen.shade300,
             foregroundColor: Colors.white,
-            minimumSize: Size(double.infinity, 50),
+            minimumSize: const Size(double.infinity, 50),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),

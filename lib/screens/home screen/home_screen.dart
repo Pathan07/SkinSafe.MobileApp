@@ -82,12 +82,11 @@ class HomeScreen extends StatelessWidget {
                       'route': RouteName.educationScreen,
                     },
                     {
-                      'title': "Secure and Private",
-                      'subtitle':
-                          "Your data is encrypted with the highest security standards.",
-                      'icon': Icons.security,
+                      'title': "Consult With Doctor",
+                      'subtitle': "Consult your problem with experts.",
+                      'icon': Icons.medical_services_outlined,
                       'color': AppColors.alertColor,
-                      'route': null,
+                      'route': RouteName.doctorChat,
                     },
                   ];
 

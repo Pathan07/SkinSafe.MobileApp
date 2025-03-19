@@ -14,14 +14,18 @@ class ForgotPassword extends StatelessWidget {
     final FirebaseAuthService authService = FirebaseAuthService();
 
     return Scaffold(
+      backgroundColor: AppColors.logoColor,
       appBar: customAppBar(title: "Reset your password"),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Center(
-              child: SizedBox(
-                height: 250,
-                child: Image.asset(ImageRes.skinSafeLogo),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: SizedBox(
+                  height: 200,
+                  child: Image.asset(ImageRes.skinSafeLogo),
+                ),
               ),
             ),
             textSize18(text: "Enter your email to receive a reset link"),

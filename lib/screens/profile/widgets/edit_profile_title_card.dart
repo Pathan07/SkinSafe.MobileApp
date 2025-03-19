@@ -3,8 +3,10 @@ import 'package:skin_safe_app/components/utilities/color.dart';
 
 class EditProfileTitleCard extends StatelessWidget {
   final String? imagURL;
+  final VoidCallback? onTap;
 
-  const EditProfileTitleCard({super.key, required this.imagURL});
+  const EditProfileTitleCard(
+      {super.key, required this.imagURL, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class EditProfileTitleCard extends StatelessWidget {
                 color: AppColors.blackColor,
               ),
               child: IconButton(
-                  onPressed: () {},
+                  onPressed: onTap,
                   icon: const Icon(
                     Icons.edit,
                     size: 15,

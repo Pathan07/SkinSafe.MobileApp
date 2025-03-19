@@ -10,7 +10,9 @@ PreferredSizeWidget customAppBar({
       padding: const EdgeInsets.only(top: 10.0),
       child: AppBar(
         backgroundColor: Colors.transparent,
-        title: textSize25(text: title),
+        title: textSize25(
+          text: title,
+        ),
       ),
     ),
   );

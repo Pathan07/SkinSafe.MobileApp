@@ -193,22 +193,22 @@ Widget signupForm({
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-              child: Row(
-                children: [
-                  const Expanded(child: Divider(thickness: 3)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: textSize16(
-                      text: "Or register with",
-                      color: AppColors.textPrimaryColor,
-                    ),
-                  ),
-                  const Expanded(child: Divider(thickness: 3)),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+            //   child: Row(
+            //     children: [
+            //       const Expanded(child: Divider(thickness: 3)),
+            //       Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 10),
+            //         child: textSize16(
+            //           text: "Or register with",
+            //           color: AppColors.textPrimaryColor,
+            //         ),
+            //       ),
+            //       const Expanded(child: Divider(thickness: 3)),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       );
@@ -309,8 +309,7 @@ Widget loginForm({
               style: TextButton.styleFrom(
                 alignment: Alignment.centerRight,
                 padding: const EdgeInsets.only(right: 15),
-                minimumSize: const Size(
-                    double.infinity, 0), 
+                minimumSize: const Size(double.infinity, 0),
               ),
               child: const Text(
                 'Forgot password?',
@@ -322,7 +321,7 @@ Widget loginForm({
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(left: 40, right: 40, top: 30),
+              margin: const EdgeInsets.only(left: 40, right: 40, top: 10),
               width: double.infinity,
               decoration: BoxDecoration(
                 color: AppColors.blackColor,
@@ -350,22 +349,22 @@ Widget loginForm({
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-              child: Row(
-                children: [
-                  const Expanded(child: Divider(thickness: 3)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: textSize16(
-                      text: "Or login with",
-                      color: AppColors.textPrimaryColor,
-                    ),
-                  ),
-                  const Expanded(child: Divider(thickness: 3)),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+            //   child: Row(
+            //     children: [
+            //       const Expanded(child: Divider(thickness: 3)),
+            //       Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 10),
+            //         child: textSize16(
+            //           text: "Or login with",
+            //           color: AppColors.textPrimaryColor,
+            //         ),
+            //       ),
+            //       const Expanded(child: Divider(thickness: 3)),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       );
