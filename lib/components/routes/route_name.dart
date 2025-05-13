@@ -24,4 +24,8 @@ class RouteName {
   static const String doctorChat = 'doc-chat-screen';
 
   static const String skinSafeBot = 'skin-safe-bot-screen';
+
+  static const String docLogin = 'doc_auth-screen';
+
+  static const String docSignUp = 'doc-singup-screen';
 }

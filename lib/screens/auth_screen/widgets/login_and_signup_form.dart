@@ -371,3 +371,157 @@ Widget loginForm({
     },
   );
 }
+
+Widget docLoginForm({
+  required GlobalKey<FormState> formKey,
+  required TextEditingController emailController,
+  required TextEditingController passwordController,
+  required VoidCallback onTap,
+  required VoidCallback forgetPassword,
+}) {
+  return Consumer(
+    builder: (context, ref, child) {
+      final isLoading = ref.watch(isLoadingProvider);
+      final isObscure = ref.watch(passwordVisibilityProvider);
+
+      return Form(
+        key: formKey,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: textSize18(
+                text:
+                    "Welcome back! We're excited to have you with us again—let's keep your skin safe together!",
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: TextFormField(
+                controller: emailController,
+                autocorrect: true,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.whiteColor,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  hintText: "Enter your email",
+                  errorStyle: const TextStyle(color: AppColors.whiteColor),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 15.0),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: TextFormField(
+                controller: passwordController,
+                obscureText: isObscure,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: AppColors.blackColor,
+                    ),
+                    onPressed: () {
+                      ref.read(passwordVisibilityProvider.notifier).toggle();
+                    },
+                  ),
+                  filled: true,
+                  fillColor: AppColors.whiteColor,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  hintText: "Enter your password",
+                  errorStyle: const TextStyle(color: AppColors.whiteColor),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 15.0),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            TextButton(
+              onPressed: forgetPassword,
+              style: TextButton.styleFrom(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 15),
+                minimumSize: const Size(double.infinity, 0),
+              ),
+              child: const Text(
+                'Forgot password?',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  color: AppColors.textPrimaryColor,
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 40, right: 40, top: 10),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.blackColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.blackColor,
+                    padding: EdgeInsets.zero,
+                    elevation: 0,
+                  ),
+                  onPressed: isLoading ? null : onTap,
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.whiteColor,
+                          ),
+                        )
+                      : textSize20(
+                          text: "Login",
+                          color: AppColors.textPrimaryColor,
+                        ),
+                ),
+              ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+            //   child: Row(
+            //     children: [
+            //       const Expanded(child: Divider(thickness: 3)),
+            //       Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 10),
+            //         child: textSize16(
+            //           text: "Or login with",
+            //           color: AppColors.textPrimaryColor,
+            //         ),
+            //       ),
+            //       const Expanded(child: Divider(thickness: 3)),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ),
+      );
+    },
+  );
+}

@@ -14,45 +14,66 @@ final authStateProvider = StreamProvider<User?>(
   (ref) => FirebaseAuth.instance.authStateChanges(),
 );
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+final showBackButtonProvider = StateProvider<bool>((ref) => true);
+
+class DocSignupScreen extends ConsumerStatefulWidget {
+  const DocSignupScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<DocSignupScreen> createState() => _DocSignupState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _DocSignupState extends ConsumerState<DocSignupScreen> {
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   final FirebaseAuthService authService = FirebaseAuthService();
 
   @override
   void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void signIn() async {
+  void signUp() async {
     ref.read(isLoadingProvider.notifier).state = true;
 
     String email = emailController.text;
     String password = passwordController.text;
+    String firstName = firstNameController.text;
+    String lastName = lastNameController.text;
 
     try {
-      User? user = await authService.loginUser(email, password, context);
+      User? user = await authService.docSignUp(
+          email,
+          password,
+          firstName,
+          lastName,
+          'https://www.gstatic.com/images/branding/product/1x/avatar_square_blue_512dp.png',
+          context);
       if (user != null) {
-        // print(user.email);
         print(user.providerData);
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          RouteName.homeScreen,
-          (Route<dynamic> route) => false,
-        );
+        ref.read(showBackButtonProvider.notifier).state = false;
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteName.homeScreen,
+            (Route<dynamic> route) => false,
+          );
+        }
+      } else {
+        print("Error: User sign-up failed.");
       }
     } catch (e) {
-      print("Sign-in error: ${e.toString()}");
+      print("Sign up error: $e");
     } finally {
       ref.read(isLoadingProvider.notifier).state = false;
     }
@@ -60,6 +81,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("Rebuild.............");
+    print("Rebuild eye----");
     final authState = ref.watch(authStateProvider);
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     ref.listen(googleLoginProvider, (previous, next) {
@@ -71,23 +94,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
       }
     });
-    
+
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: AppColors.whiteColor),
+        title: textSize18(
+            text: 'Register to get started', fontWeight: FontWeight.normal),
+        centerTitle: true,
       ),
       backgroundColor: AppColors.logoColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: CircleAvatar(
                   radius: 80,
-                  child: Image.asset(ImageRes.skinSafeLogo),
+                  child: Image.asset(ImageRes.doctorLogo),
                 ),
               ),
               textSize40(text: "Skin Safe"),
@@ -95,23 +119,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 data: (user) {
                   return Column(
                     children: [
-                      loginForm(
-                        forgetPassword: () {
-                          Navigator.pushNamed(
-                              context, RouteName.forgetPassword);
-                        },
+                      signupForm(
                         formKey: formKey,
                         onTap: () {
                           if (formKey.currentState!.validate()) {
-                            signIn();
+                            signUp();
                           }
                         },
+                        firstNameController: firstNameController,
+                        lastNameController: lastNameController,
                         emailController: emailController,
                         passwordController: passwordController,
+                        confirmPasswordController: confirmPasswordController,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       homeScreenLoginButtons(ref: ref),
                       const SizedBox(height: 20),
                     ],

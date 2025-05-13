@@ -5,6 +5,7 @@ import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/routes/route_name.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
 import 'package:skin_safe_app/components/utilities/images.dart';
+import 'package:skin_safe_app/controllers/google_login.controller.dart';
 import 'package:skin_safe_app/screens/auth_screen/service/FirebaseAuthService.dart';
 import 'package:skin_safe_app/screens/auth_screen/widgets/login_and_signup_form.dart';
 import 'package:skin_safe_app/screens/auth_screen/widgets/login_buttons.dart';
@@ -12,6 +13,7 @@ import 'package:skin_safe_app/screens/auth_screen/widgets/login_buttons.dart';
 final authStateProvider = StreamProvider<User?>(
   (ref) => FirebaseAuth.instance.authStateChanges(),
 );
+
 final showBackButtonProvider = StateProvider<bool>((ref) => true);
 
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -83,12 +85,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     print("Rebuild eye----");
     final authState = ref.watch(authStateProvider);
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    ref.listen(googleLoginProvider, (previous, next) {
+      if (next.status == AuthStatus.authenticated) {
+        Navigator.pushReplacementNamed(context, RouteName.homeScreen);
+      } else if (next.status == AuthStatus.error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.error ?? 'Unknown error')),
+        );
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
         title: textSize18(
             text: 'Register to get started', fontWeight: FontWeight.normal),
-            centerTitle: true,
+        centerTitle: true,
       ),
       backgroundColor: AppColors.logoColor,
       body: SafeArea(
@@ -121,26 +132,45 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         passwordController: passwordController,
                         confirmPasswordController: confirmPasswordController,
                       ),
-                      // homeScreenLoginButtons(ref: ref),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Row(
+                      const SizedBox(height: 20),
+                      homeScreenLoginButtons(ref: ref),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          textSize16(
+                              text: "Already have an account?",
+                              color: AppColors.textPrimaryColor),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, RouteName.loginScreen);
+                            },
+                            child: textSize16(
+                                text: "Login Now", color: AppColors.blackColor),
+                          )
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteName.docLogin);
+                        },
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            textSize16(
-                                text: "Already have an account?",
-                                color: AppColors.textPrimaryColor),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                    context, RouteName.loginScreen);
-                              },
-                              child: textSize16(
-                                  text: "Login Now",
-                                  color: AppColors.blackColor),
-                            )
+                            Text(
+                              "Login as doctor",
+                              style: TextStyle(color: AppColors.whiteColor),
+                            ),
+                            SizedBox(width: 10),
+                            Icon(
+                              Icons.person_add_outlined,
+                              color: AppColors.whiteColor,
+                            ),
                           ],
                         ),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       )
                     ],
                   );

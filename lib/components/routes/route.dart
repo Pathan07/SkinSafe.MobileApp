@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:skin_safe_app/components/routes/route_name.dart';
 import 'package:skin_safe_app/screens/about/about_screen.dart';
@@ -9,6 +8,8 @@ import 'package:skin_safe_app/screens/auth_screen/sign_up_screen.dart';
 import 'package:skin_safe_app/screens/chat_bot/chat_bot.dart';
 import 'package:skin_safe_app/screens/doctor%20section/doctor%20chat/chat_screen.dart';
 import 'package:skin_safe_app/screens/doctor%20section/doctor%20history/doctor_profile_history.dart';
+import 'package:skin_safe_app/screens/doctor/doc_signup_screen.dart';
+import 'package:skin_safe_app/screens/doctor/doctor_login_screen.dart';
 import 'package:skin_safe_app/screens/education/education_screen.dart';
 import 'package:skin_safe_app/screens/home%20screen/home_screen.dart';
 import 'package:skin_safe_app/screens/profile/profile_screen.dart';
@@ -38,6 +39,16 @@ class Routes {
           builder: (_) => const HistoryScreen1(),
         );
 
+      case RouteName.docLogin:
+        return MaterialPageRoute(
+          builder: (_) => const DoctorAuth(),
+        );
+
+      case RouteName.docSignUp:
+        return MaterialPageRoute(
+          builder: (_) => const DocSignupScreen(),
+        );
+
       case RouteName.scanOutputScreen:
         final argument = settings.arguments as File?;
         return MaterialPageRoute(
@@ -48,7 +59,7 @@ class Routes {
 
       case RouteName.educationScreen:
         return MaterialPageRoute(
-          builder: (_) => EducationScreen(),
+          builder: (_) => const EducationScreen(),
         );
 
       case RouteName.doctorHistory:

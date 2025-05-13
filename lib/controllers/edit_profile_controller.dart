@@ -9,39 +9,78 @@ final editProfileProvider = StateNotifierProvider.autoDispose<
 
 class EditProfileController extends StateNotifier<AsyncValue<UserData>> {
   EditProfileController() : super(const AsyncValue.loading()) {
-    _fetchEditProfileData();
+    _fetchEditProfileDataa();
   }
   UserData? _profileData;
-
-  Future<void> _fetchEditProfileData() async {
+  Future<void> _fetchEditProfileDataa() async {
     if (_profileData != null) {
       print('Loading data from local cache');
       state = AsyncValue.data(_profileData!);
       return;
     }
+
     print('Fetching data from Firestore');
     try {
-      final userId = FirebaseAuth.instance.currentUser;
-      if (userId == null) {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
         throw Exception('No user is currently signed in');
       }
 
       final firebase = FirebaseFirestore.instance;
-      final DocumentSnapshot documentSnapshot =
-          await firebase.collection("user").doc(userId.uid).get();
 
-      if (!documentSnapshot.exists) {
-        throw Exception('User does not exist');
+      // Try fetching from 'doctors' collection first
+      DocumentSnapshot docSnapshot =
+          await firebase.collection("doctors").doc(user.uid).get();
+
+      if (!docSnapshot.exists) {
+        // If not found, try from 'user' collection
+        docSnapshot = await firebase.collection("user").doc(user.uid).get();
+
+        if (!docSnapshot.exists) {
+          throw Exception('User not found in doctors or user collection');
+        } else {
+          print('User found in user collection');
+        }
+      } else {
+        print('User found in doctors collection');
       }
-      _profileData = UserData.fromFirestore(documentSnapshot);
-      print('Data fetched from Firestore');
+
+      _profileData = UserData.fromFirestore(docSnapshot);
       state = AsyncValue.data(_profileData!);
     } catch (error, stackTrace) {
-     if (mounted) {
+      if (mounted) {
         state = AsyncValue.error(error, stackTrace);
       }
     }
   }
+
+  // Future<void> _fetchEditProfileData() async {
+  //   if (_profileData != null) {
+  //     print('Loading data from local cache');
+  //     state = AsyncValue.data(_profileData!);
+  //     return;
+  //   }
+  //   print('Fetching data from Firestore');
+  //   try {
+  //     final userId = FirebaseAuth.instance.currentUser;
+  //     if (userId == null) {
+  //       throw Exception('No user is currently signed in');
+  //     }
+  //     final firebase = FirebaseFirestore.instance;
+  //     final DocumentSnapshot documentSnapshot =
+  //         await firebase.collection("user").doc(userId.uid).get();
+  //     if (!documentSnapshot.exists) {
+  //       throw Exception('User does not exist');
+  //     }
+  //     _profileData = UserData.fromFirestore(documentSnapshot);
+  //     print('Data fetched from Firestore');
+  //     state = AsyncValue.data(_profileData!);
+  //   } catch (error, stackTrace) {
+  //     if (mounted) {
+  //       state = AsyncValue.error(error, stackTrace);
+  //     }
+  //   }
+  // }
 
   Future<void> updateProfile(UserData user) async {
     print('Updating profile with new data');

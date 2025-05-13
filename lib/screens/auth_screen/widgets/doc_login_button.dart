@@ -3,22 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
 import 'package:skin_safe_app/components/utilities/images.dart';
-import 'package:skin_safe_app/controllers/google_login.controller.dart';
+import 'package:skin_safe_app/controllers/doc_google_provider.dart';
 
-Widget homeScreenLoginButtons({required WidgetRef ref}) {
-  return SeabeeStudyLoginButtons(
+Widget docAuthScreenLogin({required WidgetRef ref}) {
+  return DoctorAutGoogleLogin(
     onTap: () async {
       print("Click Google btn");
-      await ref.read(googleLoginProvider.notifier).signInWithGoogle();
+      await ref.read(docGoogleLoginProvider.notifier).signInWithGoogle();
     },
     icon: ImageRes.googleLogo,
   );
 }
 
-class SeabeeStudyLoginButtons extends StatelessWidget {
+class DoctorAutGoogleLogin extends StatelessWidget {
   final String icon;
   final VoidCallback onTap;
-  const SeabeeStudyLoginButtons({
+  const DoctorAutGoogleLogin({
     super.key,
     required this.icon,
     required this.onTap,

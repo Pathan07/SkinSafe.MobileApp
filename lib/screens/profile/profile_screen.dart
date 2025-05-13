@@ -14,73 +14,82 @@ class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   // Function to select and update avatar
-  Future<void> _selectAvatar(BuildContext context, WidgetRef ref, String userId) async {
-  try {
-    // Fetch avatars from Firestore
-    final avatarsSnapshot = await FirebaseFirestore.instance.collection('avatars').get();
-    final avatars = avatarsSnapshot.docs.map((doc) => doc['avatarUrl'] as String).toList();
+  Future<void> _selectAvatar(
+      BuildContext context, WidgetRef ref, String userId) async {
+    try {
+      // Fetch avatars from Firestore
+      final avatarsSnapshot =
+          await FirebaseFirestore.instance.collection('avatars').get();
+      final avatars = avatarsSnapshot.docs
+          .map((doc) => doc['avatarUrl'] as String)
+          .toList();
 
-    if (avatars.isEmpty) return;
+      if (avatars.isEmpty) return;
 
-    // Show avatar selection dialog
-    final selectedAvatar = await showDialog<String>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: textSize20(text: "Select an Avatar"),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              shrinkWrap: true,
-              itemCount: avatars.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, avatars[index]); // Close dialog & return avatar
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(10),
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(avatars[index]),
+      // Show avatar selection dialog
+      final selectedAvatar = await showDialog<String>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: textSize20(text: "Select an Avatar"),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                shrinkWrap: true,
+                itemCount: avatars.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context,
+                          avatars[index]); // Close dialog & return avatar
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(10),
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(avatars[index]),
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
 
-    if (selectedAvatar != null) {
-      // Fetch the current user data
-      final userDoc = await FirebaseFirestore.instance.collection('user').doc(userId).get();
-      final userData = userDoc.data();
+      if (selectedAvatar != null) {
+        // Fetch the current user data
+        final userDoc = await FirebaseFirestore.instance
+            .collection('user')
+            .doc(userId)
+            .get();
+        final userData = userDoc.data();
 
-      // Update Firestore with selected avatar and existing fields
-      await FirebaseFirestore.instance.collection('user').doc(userId).update({
-        "profileImage": selectedAvatar,
-        "firstname": userData?['firstname'],
-        "lastname": userData?['lastname'],
-        "email": userData?['email'],
-      });
+        // Update Firestore with selected avatar and existing fields
+        await FirebaseFirestore.instance.collection('user').doc(userId).update({
+          "profileImage": selectedAvatar,
+          "firstname": userData?['firstname'],
+          "lastname": userData?['lastname'],
+          "email": userData?['email'],
+        });
 
-      // Update local provider state (so UI updates instantly)
-      ref.read(editProfileProvider.notifier).updateProfile(UserData(
-        imgURL: selectedAvatar,
-        firstName: userData?['firstname'],
-        lastName: userData?['lastname'],
-        email: userData?['email'],
-      ));
+        // Update local provider state (so UI updates instantly)
+        ref.read(editProfileProvider.notifier).updateProfile(UserData(
+              imgURL: selectedAvatar,
+              firstName: userData?['firstname'],
+              lastName: userData?['lastname'],
+              email: userData?['email'],
+            ));
+      }
+    } catch (e) {
+      print("Error fetching avatars: $e");
     }
-  } catch (e) {
-    print("Error fetching avatars: $e");
   }
-}
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileData = ref.watch(editProfileProvider);

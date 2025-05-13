@@ -5,23 +5,23 @@ import 'package:skin_safe_app/components/custom_widgets/custom_text.dart';
 import 'package:skin_safe_app/components/routes/route_name.dart';
 import 'package:skin_safe_app/components/utilities/color.dart';
 import 'package:skin_safe_app/components/utilities/images.dart';
-import 'package:skin_safe_app/controllers/google_login.controller.dart';
+import 'package:skin_safe_app/controllers/doc_google_provider.dart';
 import 'package:skin_safe_app/screens/auth_screen/service/FirebaseAuthService.dart';
+import 'package:skin_safe_app/screens/auth_screen/widgets/doc_login_button.dart';
 import 'package:skin_safe_app/screens/auth_screen/widgets/login_and_signup_form.dart';
-import 'package:skin_safe_app/screens/auth_screen/widgets/login_buttons.dart';
 
 final authStateProvider = StreamProvider<User?>(
   (ref) => FirebaseAuth.instance.authStateChanges(),
 );
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class DoctorAuth extends ConsumerStatefulWidget {
+  const DoctorAuth({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<DoctorAuth> createState() => _DoctorAuthState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _DoctorAuthState extends ConsumerState<DoctorAuth> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -62,16 +62,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    ref.listen(googleLoginProvider, (previous, next) {
-      if (next.status == AuthStatus.authenticated) {
+
+    ref.listen(docGoogleLoginProvider, (previous, next) {
+      if (next.status == DocAuthStatus.authenticated) {
         Navigator.pushReplacementNamed(context, RouteName.homeScreen);
-      } else if (next.status == AuthStatus.error) {
+      } else if (next.status == DocAuthStatus.error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(next.error ?? 'Unknown error')),
         );
       }
     });
-    
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: AppColors.whiteColor),
@@ -87,7 +88,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: CircleAvatar(
                   radius: 80,
-                  child: Image.asset(ImageRes.skinSafeLogo),
+                  child: Image.asset(ImageRes.doctorLogo),
                 ),
               ),
               textSize40(text: "Skin Safe"),
@@ -95,7 +96,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 data: (user) {
                   return Column(
                     children: [
-                      loginForm(
+                      docLoginForm(
                         forgetPassword: () {
                           Navigator.pushNamed(
                               context, RouteName.forgetPassword);
@@ -109,11 +110,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         emailController: emailController,
                         passwordController: passwordController,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      homeScreenLoginButtons(ref: ref),
                       const SizedBox(height: 20),
+                      docAuthScreenLogin(ref: ref),
+                      const SizedBox(height: 20),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteName.docSignUp);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            textSize16(
+                                text: "Don't have an account?",
+                                color: AppColors.whiteColor),
+                            const SizedBox(width: 10),
+                            textSize16(
+                              text: "Sign Up",
+                              color: AppColors.blackColor,
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   );
                 },

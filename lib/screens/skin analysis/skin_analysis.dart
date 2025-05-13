@@ -355,10 +355,8 @@ class _MelanomaDetectorState extends State<MelanomaDetector> {
   @override
   Widget build(BuildContext context) {
     // Define colors to match new theme
-    final Color logoColor = Colors.lightGreen.shade300;
-    final Color textPrimaryColor = Colors.white;
-    final Color textSecondaryColor = Colors.black87;
-    final Color whiteColor = Colors.white;
+    const Color textSecondaryColor = Colors.black87;
+    const Color whiteColor = Colors.white;
 
     return Scaffold(
       appBar: AppBar(
@@ -1031,7 +1029,6 @@ class ScanDetailScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text("Back to History"),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.lightGreen.shade300,
             foregroundColor: Colors.white,
@@ -1040,6 +1037,7 @@ class ScanDetailScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
+          child: const Text("Back to History"),
         ),
       ),
     );

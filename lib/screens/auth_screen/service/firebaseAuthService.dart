@@ -67,6 +67,62 @@ class FirebaseAuthService {
     return null;
   }
 
+  Future<User?> docSignUp(String email, String password, String firstName,
+      String lastName, String profileImage, BuildContext context) async {
+    try {
+      UserCredential credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User? user = credential.user;
+
+      if (user != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection("user")
+            .doc(user.uid)
+            .get();
+
+        if (!userDoc.exists) {
+          await FirebaseFirestore.instance
+              .collection("doctors")
+              .doc(user.uid)
+              .set({
+            'firstname': firstName,
+            'lastname': lastName,
+            'createdAt': FieldValue.serverTimestamp(),
+            'email': user.email,
+            'profileImage': profileImage,
+          });
+        }
+      }
+
+      return user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('The password provided is too weak.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'The account already exists for that email.',
+              overflow: TextOverflow.ellipsis,
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+    return null;
+  }
+
   Future<User?> loginUser(
     String email,
     String password,
@@ -105,6 +161,7 @@ class FirebaseAuthService {
       return null;
     }
   }
+
   Future<void> sendPasswordResetEmail(
       String email, BuildContext context) async {
     try {
